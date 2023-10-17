@@ -15,20 +15,21 @@ db.serialize(() => {
     CREATE TABLE patientRecords (
       id INTEGER PRIMARY KEY,
       name TEXT,
-      age INTEGER,
-      diagnosis TEXT,
-      treatment TEXT
+      National_Id INTEGER,
+      Heart_rate INTEGER,
+      temperature INTEGER,
+      frequent_sickness TEXT
     )
   `);
 
 });
 
 app.post('/patientRecords', (req, res) => {
-  const { name, age, diagnosis, treatment } = req.body;
+  const { name, National_Id, Heart_rate, temperature,frequent_sickness } = req.body;
 
   // Insert the new patient into the database
-  const insertPatient = db.prepare('INSERT INTO patientRecords (name, age, diagnosis, treatment) VALUES (?, ?, ?, ?)');
-  insertPatient.run(name, age, diagnosis, treatment);
+  const insertPatient = db.prepare('INSERT INTO patientRecords (name, National_Id, Heart_rate, temperature,frequent_sickness) VALUES (?, ?, ?, ?,?)');
+  insertPatient.run(name, National_Id, Heart_rate, temperature,frequent_sickness);
   insertPatient.finalize();
 
   res.send('New patient added to the database');
@@ -48,12 +49,12 @@ app.get('/patientRecords', (req, res) => {
 
 app.put('/patientRecords/:id', (req, res) => {
   const { id } = req.params;
-  const { name, age, diagnosis, treatment } = req.body;
+  const { name, National_Id, Heart_rate, temperature,frequent_sickness} = req.body;
 
   db.run(
     // update the
-    'UPDATE patientRecords SET name = ?, age = ?, diagnosis = ?, treatment = ? WHERE id = ?',
-    [name, age, diagnosis, treatment, id],
+    'UPDATE patientRecords SET name = ?, National_Id = ?, temperature = ?,Heart_rate = ?, frequent_sickness = ? WHERE id = ?',
+    [name, National_Id, Heart_rate, temperature,frequent_sickness, id],
     (err) => {
       if (err) {
         console.error(err);
